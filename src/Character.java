@@ -1,6 +1,7 @@
-public abstract class Chaser implements Comparable {
+public abstract class Character implements Comparable {
     private int[] position = new int[2];
     private String name;
+    protected boolean player;
 
     //default constructor?
 

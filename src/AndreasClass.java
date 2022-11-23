@@ -1,8 +1,12 @@
-public class AndreasClass extends AndreasChaser implements Move {
+public class AndreasClass extends AndreasCharacter implements Move {
+
+    public AndreasClass(int[] position) {
+        super(position); //AndreasCharacter constructor
+    }
     @Override
-    public void printPosition(boolean chaser) {
+    public void printPosition(boolean chaser) {   //muss noch positiont ausgeben
         if(chaser)
-            chaser = !chaser;
+            chaser = !chaser;   //ruf next move auf und prints in gui
         return;
     }
 
