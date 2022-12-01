@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.Random;
 
 public class Game {
-    private final static int FIELD_SIZE = 8;
+    public final static int FIELD_SIZE = 8;
     private int[][] field = new int[FIELD_SIZE][FIELD_SIZE];
 
 
