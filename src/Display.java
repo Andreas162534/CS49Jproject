@@ -11,7 +11,7 @@ public class Display extends JFrame {
     public Display(int bestScore, int lastScore, int score, Character player, Character andreasChaser,
                    Character sophieChaser, Character harryChaser) {
         //setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        
+
         setLayout(new GridLayout(Game.FIELD_SIZE + 1, Game.FIELD_SIZE));
         for (int it = 0; it < Game.FIELD_SIZE; it++) {
             header[it] = new JLabel();
@@ -121,3 +121,6 @@ public class Display extends JFrame {
 }
 
 
+//keylistnener
+//recursive
+// compare to
