@@ -5,12 +5,14 @@ import java.util.*;
 
 import java.util.Random;
 
+import static java.lang.Thread.sleep;
+
 public class Game {
     public final static int FIELD_SIZE = 8;
     private int[][] field = new int[FIELD_SIZE][FIELD_SIZE];
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Stack<Integer> scores = new Stack<>();   //parse scores to integer
         String filename = "highscore.txt";  //clean up
 
@@ -18,7 +20,7 @@ public class Game {
 
         try (Scanner scanner = new Scanner(file)) {
 
-            while (scanner.hasNextLine()) {
+            while (scanner.hasNextInt()) {
                 int data = scanner.nextInt();
                 scores.push(data);  //push in stack
 
@@ -45,6 +47,8 @@ public class Game {
         Character player = new Player(initialPosition);
         gameTurn.add(player);
 
+        //initial position different for all chasers?
+
         xPosition = random.nextInt(FIELD_SIZE - 1);
         yPosition = random.nextInt(FIELD_SIZE - 1);
         initialPosition = new int[]{xPosition, yPosition};   //2d array for position
@@ -52,34 +56,37 @@ public class Game {
         gameTurn.add(andreasChaser);
 
 
-        /*
         xPosition = random.nextInt(FIELD_SIZE - 1);
         yPosition = random.nextInt(FIELD_SIZE - 1);
         initialPosition = new int[]{xPosition, yPosition};
-        Character harryChaser = new harryCharacter(initialPosition);
-        gameTurn.add(new HarrysCharacter(initialPosition));
+        Character harryChaser = new RanveerCharacter(initialPosition);
+        gameTurn.add(new RanveerCharacter(initialPosition));
 
         xPosition = random.nextInt(FIELD_SIZE - 1);
         yPosition = random.nextInt(FIELD_SIZE - 1);
         initialPosition = new int[]{xPosition, yPosition};
-        Character sophieChaser = new sophieCharacter(initialPosition);
-        gameTurn.add(new SophiesCharacter(initialPosition));*/
+        Character sophieChaser = new SophieCharacter(initialPosition);
+        gameTurn.add(new SophieCharacter(initialPosition));
 
         // GUI
-        JPanel window = new JPanel();
+        ////JPanel window = new JPanel();
         /*window.setBounds(25, 25, 400,450);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         GridLayout grid = new GridLayout(FIELD_SIZE+1, FIELD_SIZE);
         Container content = window.getContentPane();
         content.setLayout(grid);*/
-        window.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        window.setLayout(new GridLayout(FIELD_SIZE + 1, FIELD_SIZE));
-        for (int i = 0; i < ((FIELD_SIZE + 1)); i++) {
-            for (int j = 0; j < ((FIELD_SIZE)); j++) {
+        ////window.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        ////window.setLayout(new GridLayout(FIELD_SIZE + 1, FIELD_SIZE));
+        /*for (int i = 0; i < (FIELD_SIZE + 1); i++) {
+            for (int j = 0; j < (FIELD_SIZE); j++) {
                 window.add(new JLabel());
             }
-        }
-
+        }*/
+        Display display = new Display(bestScore, lastScore, score, player, andreasChaser, sophieChaser, harryChaser);
+        display.setSize(80,90);
+        display.setVisible(true);
+        display.pack();
+        display.setTitle("PacMan");
         ///
         while (!checkPlayerDead(player, andreasChaser, harryChaser, sophieChaser)) {
 //ToDo warning  for compareTo
@@ -87,7 +94,7 @@ public class Game {
 
             int it = 0;
 
-            for (Component jc : window.getComponents()) {
+           /* for (Component jc : window.getComponents()) {
                 if (jc instanceof JLabel) {
 
                     switch (it) {
@@ -115,7 +122,7 @@ public class Game {
                         case 7 -> {
                             ((JLabel) jc).setText(Integer.toString(score));
                         }
-
+        //busted condition implemented for all  3 chasers,
                         default -> {
                             int x = (it - FIELD_SIZE) % FIELD_SIZE;
                             int y = (it - FIELD_SIZE) / FIELD_SIZE;
@@ -123,15 +130,11 @@ public class Game {
                                 ((JLabel) jc).setText("P");
                             } else if (x == andreasChaser.getPosition()[0] && y == andreasChaser.getPosition()[1]) {
                                 ((JLabel) jc).setText("C");
-                            }
-                        /*
-                        else if(x == sophieChaser.getPosition()[0] && y == sophieChaser.getPosition()[1]){
-                            ((JLabel) jc).setText("C");
-                        }
-                        else if(x == harryChaser.getPosition()[0] && y == harryChaser.getPosition()[1]){
-                            ((JLabel) jc).setText("C");
-                        }*/
-                            else {
+                            } else if (x == sophieChaser.getPosition()[0] && y == sophieChaser.getPosition()[1]) {
+                                ((JLabel) jc).setText("C");
+                            } else if (x == harryChaser.getPosition()[0] && y == harryChaser.getPosition()[1]) {
+                                ((JLabel) jc).setText("C");
+                            } else {
                                 ((JLabel) jc).setText("");
                             }
                         }
@@ -140,12 +143,16 @@ public class Game {
 
                 }
                 it++;
-            }
+            }*/
 
             //call printmove
             //implement key listener in player to move
             //recursion (whatever)
-
+            display.update(bestScore, lastScore, score, player, andreasChaser, sophieChaser, harryChaser);
+            display.setSize(80,90);
+            display.setVisible(true);
+            display.pack();
+            sleep(1000);
             score++;
         }
 

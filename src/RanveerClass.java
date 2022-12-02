@@ -1,4 +1,4 @@
-public class RanveerClass {
+
     public class RanveerClass extends RanveerCharacter implements Move{
         public RanveerClass(int[] position) {
             super(position);
@@ -9,4 +9,4 @@ public class RanveerClass {
 
         }
     }
-}
+
