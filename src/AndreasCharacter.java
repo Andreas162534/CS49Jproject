@@ -36,10 +36,24 @@ public class AndreasCharacter extends Character {
         //move
 
 //todo yplayer
-
-        if (xplayer + 1 > 7) {
+        if (ytoggle) {
+            yplayer = yplayer + 1;
         } else {
+            yplayer = yplayer - 1;
         }
+
+        if (yplayer > 7) {
+            ytoggle = false;
+            yplayer = yplayer - 1;
+        }
+        if (yplayer < 0) {
+            ytoggle = true;
+            yplayer = yplayer + 1;
+        }
+
+      /*  if (xplayer + 1 > 7) {
+        } else {
+        }  */
 
 
         this.setPosition(new int[]{xplayer, yplayer});
