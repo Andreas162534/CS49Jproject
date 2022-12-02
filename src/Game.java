@@ -52,18 +52,18 @@ public class Game {
         gameTurn.add(andreasChaser);
 
 
-        /*
+
         xPosition = random.nextInt(FIELD_SIZE - 1);
         yPosition = random.nextInt(FIELD_SIZE - 1);
         initialPosition = new int[]{xPosition, yPosition};
-        Character harryChaser = new harryCharacter(initialPosition);
-        gameTurn.add(new HarrysCharacter(initialPosition));
+        Character harryChaser = new RanveerCharacter(initialPosition);
+        gameTurn.add(new Character(initialPosition));
 
         xPosition = random.nextInt(FIELD_SIZE - 1);
         yPosition = random.nextInt(FIELD_SIZE - 1);
         initialPosition = new int[]{xPosition, yPosition};
         Character sophieChaser = new sophieCharacter(initialPosition);
-        gameTurn.add(new SophiesCharacter(initialPosition));*/
+        gameTurn.add(new SophiesCharacter(initialPosition));
 
         // GUI
         JPanel window = new JPanel();

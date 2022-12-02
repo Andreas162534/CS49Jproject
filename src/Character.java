@@ -24,7 +24,19 @@ public abstract class Character implements Comparable {
     }
 
     @Override       // TODO
-    public int compareTo(Object o) {
-        return 0;
+    public int compareTo(Object object) {
+        Character o = (Character) object;
+        if (this.player && !o.player) { //las mich doch
+            return -50;  //to make case 2
+        } else if (!this.player && !o.player) {
+
+            int distObject = (int) Math.sqrt(o.position[0]^2 + o.position[1]^2);
+            int distThis = (int) Math.sqrt(this.position[0]^2 + this.position[1]^2);
+
+            return distThis - distObject ;  //this kleiner , dnan negativ
+
+        } else {
+            return 50;
+        }
     }
 }
