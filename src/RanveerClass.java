@@ -6,6 +6,7 @@
 
         @Override
         public void printPosition(boolean chaser) {
+            System.out.println("Position of Ranveer is " +  this.getPosition()[0] + ","+ this.getPosition()[1] );
 
         }
     }

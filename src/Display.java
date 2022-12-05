@@ -1,11 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Display extends JFrame {
 
-    private JPanel panel= new JPanel();
+    private JPanel panel = new JPanel();
     private JLabel header[] = new JLabel[Game.FIELD_SIZE];
-    private JLabel field[]= new JLabel[Game.FIELD_SIZE*Game.FIELD_SIZE];
+    private JLabel field[] = new JLabel[Game.FIELD_SIZE * Game.FIELD_SIZE];
+    private int keyCode = 0;
 
 
     public Display(int bestScore, int lastScore, int score, Character player, Character andreasChaser,
@@ -13,6 +16,14 @@ public class Display extends JFrame {
         //setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         setLayout(new GridLayout(Game.FIELD_SIZE + 1, Game.FIELD_SIZE));
+
+        panel.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                keyCode = e.getKeyCode();  //tells me which button i pressed
+            }
+
+        });
+        setFocusable(true);
         for (int it = 0; it < Game.FIELD_SIZE; it++) {
             header[it] = new JLabel();
             panel.add(header[it]);
@@ -50,7 +61,7 @@ public class Display extends JFrame {
             field[it] = new JLabel();
             panel.add(field[it]);
             //busted condition implemented for all  3 chasers
-            int x = (it - Game.FIELD_SIZE) % Game.FIELD_SIZE;
+            int x = (it - Game.FIELD_SIZE) % Game.FIELD_SIZE;  //quick maths
             int y = (it - Game.FIELD_SIZE) / Game.FIELD_SIZE;
             if (x == player.getPosition()[0] && y == player.getPosition()[1]) {
                 field[it].setText("P");
@@ -70,7 +81,21 @@ public class Display extends JFrame {
 
     public void update(int bestScore, int lastScore, int score, Character player, Character andreasChaser,
                        Character sophieChaser, Character harryChaser) {
-        for (int it = 0; it < Game.FIELD_SIZE; it++) {
+        while (keyCode == 0);
+
+
+        if (keyCode == KeyEvent.VK_UP) {                //keyCode = geTKeyCode
+            player.nextMove(new int[]{0, -1});
+        } else if (keyCode == KeyEvent.VK_DOWN) {
+            player.nextMove(new int[]{0, 1});
+        } else if (keyCode == KeyEvent.VK_LEFT) {
+            player.nextMove(new int[]{-1, 0});
+        } else if (keyCode == KeyEvent.VK_RIGHT) {
+            player.nextMove(new int[]{1, 0});
+        }
+        keyCode = 0;
+
+        for (int it = 0; it < Game.FIELD_SIZE; it++) {  //set first row before first game!
 
             switch (it) {
                 case 0 -> {

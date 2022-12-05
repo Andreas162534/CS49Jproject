@@ -3,12 +3,17 @@ import java.awt.*;
 import java.io.*;
 import java.util.*;
 
+import java.util.List;
 import java.util.Random;
 
 import static java.lang.Thread.sleep;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
 public class Game {
     public final static int FIELD_SIZE = 8;
+    public final static int WARNING_RADIUS = 2;
     private int[][] field = new int[FIELD_SIZE][FIELD_SIZE];
 
 
@@ -22,9 +27,7 @@ public class Game {
 
             while (scanner.hasNextInt()) {
                 int data = scanner.nextInt();
-                scores.push(data);  //push in stack
-
-                System.out.println(data);  //TODO delete
+                scores.push(data);  //push on stack
             }
             // scanner.close();
         } catch (FileNotFoundException e) {
@@ -37,7 +40,7 @@ public class Game {
 
 
         int score = 0;
-        ArrayList<Character> gameTurn = new ArrayList<>();
+        ArrayList<Character> gameTurn = new ArrayList<Character>();
 
         Random random = new Random();
 
@@ -68,88 +71,37 @@ public class Game {
         Character sophieChaser = new SophieCharacter(initialPosition);
         gameTurn.add(new SophieCharacter(initialPosition));
 
-        // GUI
-        ////JPanel window = new JPanel();
-        /*window.setBounds(25, 25, 400,450);
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        GridLayout grid = new GridLayout(FIELD_SIZE+1, FIELD_SIZE);
-        Container content = window.getContentPane();
-        content.setLayout(grid);*/
-        ////window.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        ////window.setLayout(new GridLayout(FIELD_SIZE + 1, FIELD_SIZE));
-        /*for (int i = 0; i < (FIELD_SIZE + 1); i++) {
-            for (int j = 0; j < (FIELD_SIZE); j++) {
-                window.add(new JLabel());
-            }
-        }*/
+        //creating Playingground!
         Display display = new Display(bestScore, lastScore, score, player, andreasChaser, sophieChaser, harryChaser);
-        display.setSize(80,90);
+        display.setSize(160, 180);
         display.setVisible(true);
         display.pack();
         display.setTitle("PacMan");
+
         ///
+
+        //ToDo warning  for compareTo
         while (!checkPlayerDead(player, andreasChaser, harryChaser, sophieChaser)) {
-//ToDo warning  for compareTo
+            andreasChaser.nextMove(new int[]{0, 0});  //there is no default parameter in java
+            harryChaser.nextMove(new int[]{0, 0});
+            sophieChaser.nextMove(new int[]{0, 0});
 
-
-            int it = 0;
-
-           /* for (Component jc : window.getComponents()) {
-                if (jc instanceof JLabel) {
-
-                    switch (it) {
-                        case 0 -> {
-                            ((JLabel) jc).setText("Best Score:");
-                        }
-                        case 1 -> {
-                            ((JLabel) jc).setText(Integer.toString(bestScore));
-                        }
-                        case 2 -> {
-                            ((JLabel) jc).setText("");
-                        }
-                        case 3 -> {
-                            ((JLabel) jc).setText("Last score:");
-                        }
-                        case 4 -> {
-                            ((JLabel) jc).setText(Integer.toString(lastScore));
-                        }
-                        case 5 -> {
-                            ((JLabel) jc).setText("");
-                        }
-                        case 6 -> {
-                            ((JLabel) jc).setText("Score:");
-                        }
-                        case 7 -> {
-                            ((JLabel) jc).setText(Integer.toString(score));
-                        }
-        //busted condition implemented for all  3 chasers,
-                        default -> {
-                            int x = (it - FIELD_SIZE) % FIELD_SIZE;
-                            int y = (it - FIELD_SIZE) / FIELD_SIZE;
-                            if (x == player.getPosition()[0] && y == player.getPosition()[1]) {
-                                ((JLabel) jc).setText("P");
-                            } else if (x == andreasChaser.getPosition()[0] && y == andreasChaser.getPosition()[1]) {
-                                ((JLabel) jc).setText("C");
-                            } else if (x == sophieChaser.getPosition()[0] && y == sophieChaser.getPosition()[1]) {
-                                ((JLabel) jc).setText("C");
-                            } else if (x == harryChaser.getPosition()[0] && y == harryChaser.getPosition()[1]) {
-                                ((JLabel) jc).setText("C");
-                            } else {
-                                ((JLabel) jc).setText("");
-                            }
-                        }
-                    }
-
-
+            Collections.sort(gameTurn);
+            int distancePlayer = (int) Math.sqrt(gameTurn.get(0).getPosition()[0] ^ 2 + gameTurn.get(0).getPosition()[1] ^ 2);
+            for (int i = 1; i < gameTurn.size(); i++) {
+                int distance = (int) Math.sqrt((gameTurn.get(i).getPosition()[0] - gameTurn.get(0).getPosition()[0]) ^ 2
+                        + (gameTurn.get(i).getPosition()[1] - gameTurn.get(0).getPosition()[1]) ^ 2);
+                if (distance <= WARNING_RADIUS) {
+                    System.out.println("Warning Chaser very close");
+                    break;                          //special breakpoint
                 }
-                it++;
-            }*/
+            }
 
-            //call printmove
-            //implement key listener in player to move
-            //recursion (whatever)
+
+
+            System.out.println("Position of Player is " +  player.getPosition()[0] + ","+ player.getPosition()[1] );
             display.update(bestScore, lastScore, score, player, andreasChaser, sophieChaser, harryChaser);
-            display.setSize(80,90);
+            display.setSize(80, 90);
             display.setVisible(true);
             display.pack();
             sleep(1000);
@@ -167,7 +119,8 @@ public class Game {
             e.printStackTrace();
         }
 
-
+        System.out.println("The fibonacci number of the highscore is: " + fibonacciRecursion(score));
+        return;
     }
 
     public static boolean checkPlayerDead(Character player, Character andreasChaser, Character harryChaser, Character sophieChaser) {
@@ -178,9 +131,23 @@ public class Game {
         }
         return false;
     }
+
+    private static int fibonacciRecursion(int n) {  //n is natural number
+        if (n == 0) {
+            return 0;
+        }
+        if (n == 1 || n == 2) {
+            return 1;
+        } else {
+            return fibonacciRecursion(n - 2) + fibonacciRecursion(n - 1);
+        }
+    }
 }
 
-//call printmove
-//implement key listener in player to move
-//recursion (whatever)
+//call printpos
+// warning
+//use interface
+
+
+//Todo loops special breakpoint
 

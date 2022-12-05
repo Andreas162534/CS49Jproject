@@ -14,7 +14,7 @@ public class AndreasCharacter extends Character {
     //diagonal run!
 
     @Override
-    public int[] nextMove() {  //strategie
+    public void nextMove(int[] dir) {  //strategie
         int xplayer = this.getPosition()[0];
         int yplayer = this.getPosition()[1];
         //set toggle
@@ -57,7 +57,6 @@ public class AndreasCharacter extends Character {
 
 
         this.setPosition(new int[]{xplayer, yplayer});
-        return this.getPosition();
     }
 
 }

@@ -10,7 +10,7 @@ public class SophieCharacter extends Character{
     }
 
     @Override
-    public int[] nextMove() {
+    public void nextMove(int[] dir) {
         Random random = new Random();
         int randNav = random.nextInt(NAVIGATION.length);
         int newX = this.getPosition()[0]+NAVIGATION[randNav][0];
@@ -20,6 +20,6 @@ public class SophieCharacter extends Character{
             newX = this.getPosition()[0]+NAVIGATION[randNav][0];
             newY = this.getPosition()[1]+NAVIGATION[randNav][1];
         }
-        return new int[]{newX, newY};
+        this.setPosition(new int[]{newX, newY});
     }
 }

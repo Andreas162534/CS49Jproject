@@ -5,6 +5,6 @@ public class SophieClass extends SophieCharacter implements Move{
 
     @Override
     public void printPosition(boolean chaser) {
-
+        System.out.println("Position of Sophie is " +  this.getPosition()[0] + ","+ this.getPosition()[1] );
     }
 }
