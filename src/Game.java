@@ -85,7 +85,7 @@ public class Game {
             andreasChaser.nextMove(new int[]{0, 0});  //there is no default parameter in java
             harryChaser.nextMove(new int[]{0, 0});
             sophieChaser.nextMove(new int[]{0, 0});
-
+            // TODO player nextMove
             Collections.sort(gameTurn);
             int distancePlayer = (int) Math.sqrt(gameTurn.get(0).getPosition()[0] ^ 2 + gameTurn.get(0).getPosition()[1] ^ 2);
             for (int i = 1; i < gameTurn.size(); i++) {
