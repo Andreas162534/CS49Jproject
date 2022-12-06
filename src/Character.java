@@ -19,13 +19,20 @@ public abstract class Character implements Comparable<Character> {
     public abstract void nextMove(int[]... dir);
 
     /**
+     * Getter for name.
+     * @return name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
      * Getter for position.
      * @return position
      */
     public int[] getPosition() {
         return position;
     }
-
 
     /**
      * Setter for name.
@@ -37,7 +44,7 @@ public abstract class Character implements Comparable<Character> {
 
     /**
      * Setter for positions.
-     * @param position
+     * @param position gives the current position back
      */
     public void setPosition(int[] position) {
         this.position = position;

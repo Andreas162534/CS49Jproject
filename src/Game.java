@@ -1,15 +1,7 @@
-import javax.swing.*;
-import java.awt.*;
 import java.io.*;
 import java.util.*;
-
-import java.util.List;
 import java.util.Random;
-
 import static java.lang.Thread.sleep;
-
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 /**
  * This class has the strategic of the game and therefore consists the psvm.
@@ -20,12 +12,12 @@ public class Game {
      */
     public final static int FIELD_SIZE = 8;
     public final static int WARNING_RADIUS = 2;
-    private int[][] field = new int[FIELD_SIZE][FIELD_SIZE];
+    private final static int[] DIRECTION = {-1, 0, 1};
 
     /**
      * Main which has the flow of the game.
-     * @param args
-     * @throws InterruptedException
+     * @param args not used
+     * @throws InterruptedException comes from Sleep but does not to be handled because no Multithreading
      */
     public static void main(String[] args) throws InterruptedException {
         Stack<Integer> scores = new Stack<>();      // Requirement to have one of the given datastructure
@@ -47,85 +39,93 @@ public class Game {
         // Provide score variables
         int bestScore = Collections.max(scores);
         int lastScore = scores.pop();
+        System.out.println("Best Score: " + bestScore + "\tLatest Score: " + lastScore);
         int score = 0;
-        ArrayList<Character> gameTurn = new ArrayList<Character>();
+        ArrayList<Character> gameTurn = new ArrayList<>();
 
         // Requirement to use random in a useful way by making a random initial position of the characters
         Random random = new Random();
         int xPosition = random.nextInt(FIELD_SIZE - 1);
         int yPosition = random.nextInt(FIELD_SIZE - 1);
-        int[] initialPosition = {xPosition, yPosition};         // Intial position for player
-        Character player = new Player(initialPosition);
-        gameTurn.add(player);
-
-        xPosition = random.nextInt(FIELD_SIZE - 1);
-        yPosition = random.nextInt(FIELD_SIZE - 1);
-        initialPosition = new int[]{xPosition, yPosition};      // Intial position for andreasChaser
-        Character andreasChaser = new AndreasCharacter(initialPosition);
+        int[] initialPosition = {xPosition, yPosition};      // Intial position for andreasChaser
+        AndreasClass andreasChaser = new AndreasClass(initialPosition);
+        andreasChaser.printPosition();
         gameTurn.add(andreasChaser);
 
         xPosition = random.nextInt(FIELD_SIZE - 1);
         yPosition = random.nextInt(FIELD_SIZE - 1);
         initialPosition = new int[]{xPosition, yPosition};      // Intial position for harryChaser
-        Character harryChaser = new RanveerCharacter(initialPosition);
+        RanveerClass harryChaser = new RanveerClass(initialPosition);
+        harryChaser.printPosition();
         gameTurn.add(new RanveerCharacter(initialPosition));
 
         xPosition = random.nextInt(FIELD_SIZE - 1);
         yPosition = random.nextInt(FIELD_SIZE - 1);
         initialPosition = new int[]{xPosition, yPosition};      // Intial position for sophieChaser
-        Character sophieChaser = new SophieCharacter(initialPosition);
+        SophieClass sophieChaser = new SophieClass(initialPosition);
+        sophieChaser.printPosition();
         gameTurn.add(new SophieCharacter(initialPosition));
 
-        //creating Playingground!
-        Display display = new Display(bestScore, lastScore, score, player, andreasChaser, sophieChaser, harryChaser);
-        display.setSize(160, 180);
-        display.setVisible(true);
-        display.pack();
-        display.setTitle("PacMan");
+        xPosition = random.nextInt(FIELD_SIZE - 1);
+        yPosition = random.nextInt(FIELD_SIZE - 1);
+        initialPosition = new int[]{xPosition, yPosition};         // Intial position for player
+        Character player = new Player(initialPosition);
+        System.out.println("Position of Player is (" +  player.getPosition()[0] + "," + player.getPosition()[1] + ")");
+        gameTurn.add(player);
 
-        ///
-
-        //ToDo warning  for compareTo
+        // The game runs until the player is dead
         while (!checkPlayerDead(player, andreasChaser, harryChaser, sophieChaser)) {
-            andreasChaser.nextMove(new int[]{0, 0});  //there is no default parameter in java
-            harryChaser.nextMove(new int[]{0, 0});
-            sophieChaser.nextMove(new int[]{0, 0});
-            // TODO player nextMove
+            // Next Position for Chasers
+            andreasChaser.nextMove();
+            andreasChaser.printPosition();
+            harryChaser.nextMove();
+            harryChaser.printPosition();
+            sophieChaser.nextMove();
+            sophieChaser.printPosition();
+
+            // Next Position for Player (Requirement loop in loop)
+            random = new Random();
+            int posX;
+            do {
+                int randDir = random.nextInt(DIRECTION.length);
+                posX = player.getPosition()[0]+DIRECTION[randDir];
+            } while(posX<0 || posX>=Game.FIELD_SIZE);
+            int posY;
+            do {
+                int randDir = random.nextInt(DIRECTION.length);
+                posY = player.getPosition()[1]+DIRECTION[randDir];
+            } while(posY<0 || posY>=Game.FIELD_SIZE);
+            player.setPosition(new int[]{posX, posY});
+            System.out.println("Position of Player is (" +  player.getPosition()[0] + "," + player.getPosition()[1] + ")");
+
+            // Warning if a chaser is too close to the player
             Collections.sort(gameTurn);
-            int distancePlayer = (int) Math.sqrt(gameTurn.get(0).getPosition()[0] ^ 2 + gameTurn.get(0).getPosition()[1] ^ 2);
             for (int i = 1; i < gameTurn.size(); i++) {
-                int distance = (int) Math.sqrt((gameTurn.get(i).getPosition()[0] - gameTurn.get(0).getPosition()[0]) ^ 2
-                        + (gameTurn.get(i).getPosition()[1] - gameTurn.get(0).getPosition()[1]) ^ 2);
-                if (distance <= WARNING_RADIUS) {
-                    System.out.println("Warning Chaser very close");
-                    break;                          //special breakpoint
+                double distance = Math.sqrt((gameTurn.get(i).getPosition()[0] - gameTurn.get(0).getPosition()[0])^2
+                        + (gameTurn.get(i).getPosition()[1] - gameTurn.get(0).getPosition()[1])^2);
+                if (distance < WARNING_RADIUS) {
+                    System.out.println("Warning! Chaser " + gameTurn.get(i).getName() + " very close to " + gameTurn.get(0).getName());
+                    break;          // Requirement special breakpoint
                 }
             }
 
-
-
-            System.out.println("Position of Player is " +  player.getPosition()[0] + ","+ player.getPosition()[1] );
-            display.update(bestScore, lastScore, score, player, andreasChaser, sophieChaser, harryChaser);
-            display.setSize(80, 90);
-            display.setVisible(true);
-            display.pack();
-            sleep(1000);
+            sleep(1000);        // To slow down the game
             score++;
         }
+        System.out.println("This games score is " + score);
 
-///
-        //FileWriter
-        try (FileWriter fileWriter = new FileWriter(filename, true);  //buffering if file is to long
+        // Requirement file writing and exception handling
+        try (FileWriter fileWriter = new FileWriter(filename, true);
              BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
              PrintWriter out = new PrintWriter(bufferedWriter)) {
-            out.println(Integer.toString(score));
+            out.println(score);
         } catch (IOException e) {
             System.out.println("IOException");
             e.printStackTrace();
         }
 
-        System.out.println("The fibonacci number of the highscore is: " + fibonacciRecursion(score));
-        return;
+        // Calling the recursive function
+        System.out.println("The sum until number of this highscore is: " + sumUntilNumber(score));
     }
 
     /**
@@ -137,12 +137,9 @@ public class Game {
      * @return true if player is dead
      */
     public static boolean checkPlayerDead(Character player, Character andreasChaser, Character harryChaser, Character sophieChaser) {
-        if (Arrays.equals(player.getPosition(), andreasChaser.getPosition()) ||
+        return Arrays.equals(player.getPosition(), andreasChaser.getPosition()) ||
                 Arrays.equals(player.getPosition(), harryChaser.getPosition()) ||
-                Arrays.equals(player.getPosition(), sophieChaser.getPosition())) {
-            return true;
-        }
-        return false;
+                Arrays.equals(player.getPosition(), sophieChaser.getPosition());
     }
 
     /**
@@ -150,14 +147,12 @@ public class Game {
      * @param n a number
      * @return the fibonacci number
      */
-    private static int fibonacciRecursion(int n) {
-        if (n == 0) {
+    private static long sumUntilNumber(int n) {
+        if (n < 1) {
             return 0;
         }
-        if (n == 1 || n == 2) {
-            return 1;
-        } else {
-            return fibonacciRecursion(n - 2) + fibonacciRecursion(n - 1);
+        else {
+            return sumUntilNumber(n - 1) + n;
         }
     }
 }
