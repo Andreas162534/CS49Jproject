@@ -11,63 +11,68 @@ import static java.lang.Thread.sleep;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+/**
+ * This class has the strategic of the game and therefore consists the psvm.
+ */
 public class Game {
+    /**
+     * Needed variables
+     */
     public final static int FIELD_SIZE = 8;
     public final static int WARNING_RADIUS = 2;
     private int[][] field = new int[FIELD_SIZE][FIELD_SIZE];
 
-
+    /**
+     * Main which has the flow of the game.
+     * @param args
+     * @throws InterruptedException
+     */
     public static void main(String[] args) throws InterruptedException {
-        Stack<Integer> scores = new Stack<>();   //parse scores to integer
-        String filename = "highscore.txt";  //clean up
-
+        Stack<Integer> scores = new Stack<>();      // Requirement to have one of the given datastructure
+        String filename = "highscore.txt";
         File file = new File(filename);
 
+        // Requirement to have a try catch and requirement to read a file
         try (Scanner scanner = new Scanner(file)) {
-
             while (scanner.hasNextInt()) {
                 int data = scanner.nextInt();
-                scores.push(data);  //push on stack
+                scores.push(data);
             }
-            // scanner.close();
-        } catch (FileNotFoundException e) {
+        }
+        catch (FileNotFoundException e) {
             System.out.println("FileNotFoundException");
             e.printStackTrace();
         }
 
-        int bestScore = Collections.max(scores);  //hope
+        // Provide score variables
+        int bestScore = Collections.max(scores);
         int lastScore = scores.pop();
-
-
         int score = 0;
         ArrayList<Character> gameTurn = new ArrayList<Character>();
 
+        // Requirement to use random in a useful way by making a random initial position of the characters
         Random random = new Random();
-
         int xPosition = random.nextInt(FIELD_SIZE - 1);
         int yPosition = random.nextInt(FIELD_SIZE - 1);
-        int[] initialPosition = {xPosition, yPosition};   //2d array for position
+        int[] initialPosition = {xPosition, yPosition};         // Intial position for player
         Character player = new Player(initialPosition);
         gameTurn.add(player);
 
-        //initial position different for all chasers?
-
         xPosition = random.nextInt(FIELD_SIZE - 1);
         yPosition = random.nextInt(FIELD_SIZE - 1);
-        initialPosition = new int[]{xPosition, yPosition};   //2d array for position
+        initialPosition = new int[]{xPosition, yPosition};      // Intial position for andreasChaser
         Character andreasChaser = new AndreasCharacter(initialPosition);
         gameTurn.add(andreasChaser);
 
-
         xPosition = random.nextInt(FIELD_SIZE - 1);
         yPosition = random.nextInt(FIELD_SIZE - 1);
-        initialPosition = new int[]{xPosition, yPosition};
+        initialPosition = new int[]{xPosition, yPosition};      // Intial position for harryChaser
         Character harryChaser = new RanveerCharacter(initialPosition);
         gameTurn.add(new RanveerCharacter(initialPosition));
 
         xPosition = random.nextInt(FIELD_SIZE - 1);
         yPosition = random.nextInt(FIELD_SIZE - 1);
-        initialPosition = new int[]{xPosition, yPosition};
+        initialPosition = new int[]{xPosition, yPosition};      // Intial position for sophieChaser
         Character sophieChaser = new SophieCharacter(initialPosition);
         gameTurn.add(new SophieCharacter(initialPosition));
 
@@ -85,7 +90,7 @@ public class Game {
             andreasChaser.nextMove(new int[]{0, 0});  //there is no default parameter in java
             harryChaser.nextMove(new int[]{0, 0});
             sophieChaser.nextMove(new int[]{0, 0});
-
+            // TODO player nextMove
             Collections.sort(gameTurn);
             int distancePlayer = (int) Math.sqrt(gameTurn.get(0).getPosition()[0] ^ 2 + gameTurn.get(0).getPosition()[1] ^ 2);
             for (int i = 1; i < gameTurn.size(); i++) {
@@ -123,6 +128,14 @@ public class Game {
         return;
     }
 
+    /**
+     * It is a static method which checks if the player is still alive or got already caught by a chaser.
+     * @param player object of the class Player
+     * @param andreasChaser object of Andreas Character
+     * @param harryChaser object of Ranveer Character
+     * @param sophieChaser object of Sophie Character
+     * @return true if player is dead
+     */
     public static boolean checkPlayerDead(Character player, Character andreasChaser, Character harryChaser, Character sophieChaser) {
         if (Arrays.equals(player.getPosition(), andreasChaser.getPosition()) ||
                 Arrays.equals(player.getPosition(), harryChaser.getPosition()) ||
@@ -132,7 +145,12 @@ public class Game {
         return false;
     }
 
-    private static int fibonacciRecursion(int n) {  //n is natural number
+    /**
+     * A recursion function to fulfill the requirements
+     * @param n a number
+     * @return the fibonacci number
+     */
+    private static int fibonacciRecursion(int n) {
         if (n == 0) {
             return 0;
         }
@@ -143,11 +161,4 @@ public class Game {
         }
     }
 }
-
-//call printpos
-// warning
-//use interface
-
-
-//Todo loops special breakpoint
 
