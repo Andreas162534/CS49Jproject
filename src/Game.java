@@ -101,8 +101,8 @@ public class Game {
             // Warning if a chaser is too close to the player
             Collections.sort(gameTurn);
             for (int i = 1; i < gameTurn.size(); i++) {
-                double distance = Math.sqrt((gameTurn.get(i).getPosition()[0] - gameTurn.get(0).getPosition()[0])^2
-                        + (gameTurn.get(i).getPosition()[1] - gameTurn.get(0).getPosition()[1])^2);
+                double distance = Math.hypot((gameTurn.get(i).getPosition()[0] - gameTurn.get(0).getPosition()[0]),
+                                            (gameTurn.get(i).getPosition()[1] - gameTurn.get(0).getPosition()[1]));
                 if (distance < WARNING_RADIUS) {
                     System.out.println("Warning! Chaser " + gameTurn.get(i).getName() + " very close to " + gameTurn.get(0).getName());
                     break;          // Requirement special breakpoint
