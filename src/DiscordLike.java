@@ -11,7 +11,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+/**
+ * A class to fulfill the requirement of showing a GUI. In this case it imitates a text
+ */
 public class DiscordLike {
+    /**
+     * The psvm to run the GUI
+     * @param args not used
+     */
     public static void main(String[] args) {
         // Create the main frame for the GUI
         JFrame frame = new JFrame("Discord");
