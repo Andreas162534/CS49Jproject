@@ -63,11 +63,18 @@ For the Display class:
 
 ### 5) Instructions  
 We used version: Version 8 Update 341 (Build 1.8.0_341-b10) and Intellij IDE
-1. Open intellij IDE
-2. Open Terminal 
-3. git clone https://github.com/Andreas162534/CS49Jproject.git (creates folder in directory where Terminal points to with all files of project)
-4. open that directory in intellij (IDE)
-5. Import list
+
+1. Open Terminal  
+2. Go to folder you want to store project at
+3. Terminal command: git clone https://github.com/Andreas162534/CS49Jproject.git (creates folder in directory where Terminal points to with all files of project)
+4. Open Intellij IDE
+5. Open that directory in intellij (IDE)
+6. Klick on: File -> Open
+7. Go to directory the project was cloned to
+8. Click on src folder to load all classes into IDE
+9. if warning appears: project JDK not setup, klick on "Set up JDK" on the right and choose a JDK Version
+10. Go to Game class and press run
+11. Go to Discordlike class and press run
 
 ### 6) JavaDoc  
    https://htmlpreview.github.io/?https://raw.githubusercontent.com/Andreas162534/CS49Jproject/master/JavaDoc/package-summary.html
