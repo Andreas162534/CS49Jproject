@@ -4,6 +4,7 @@
     https://github.com/Andreas162534/CS49Jproject.git
 
 ### 2) Link to presentation if needed (slides will be in ZIP)  
+    https://docs.google.com/presentation/d/1EXsTalczVhCHXAnSibkaiY533XbUpwPvN7E0bIKEAjw/edit?usp=sharing
 
 ### 3) Programm Description  
 - Game class:  
